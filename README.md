@@ -4,16 +4,16 @@ A network scanner to scan for hosts infected with the GTPDOOR malware. Technical
 Three detection methods supported:
  1. ACK scan (detects GTPDOOR v2)
  2. TCP connect scan (detects GTPDOOR v2)
- 3. GTP-C GTPDOOR message type 0x6 (detects GTPDOOR v1 + v2) if default hardcoded key ihas not been changed
+ 3. GTP-C GTPDOOR message type 0x6 (detects GTPDOOR v1 + v2) if default hardcoded key has not been changed
 
 Note that for 1+2, the GTPDOOR implant must have ACLs configured for it's TCP RST/ACK beacon to respond.
-Given these conditions, it cannot be guaranteed that GTPDOOR will be detected from active network scanning. 
+Given these conditions, it cannot be guaranteed that GTPDOOR will be detected alone from active network scanning. 
 
 # Usage
 ## Installation
 Compiled 64-bit Linux executable available [here](https://github.com/haxrob/gtpdoor-scan/releases/), or build yourself:
 ```
-go install github.com/haxrob/GTPDOOR-SCAN/@latest
+go install github.com/haxrob/gtpdoor-scan/@latest
 ```
 ## Running 
 ```
@@ -37,6 +37,23 @@ options:
 example: ./gtpdoor-scan --ack --ports 21,211 --gtp 192.168.0.0/24 10.2.1.1
 example: ./gtpdoor-scan --all -f targets.txt
 ```
+
+Using `--all` will initiate all three scan modes (`--gtp`,`--connect`, `--ack`). 
+A note on the TCP connect scan, a target's TCP port must be responding. For the ACK mode, any arbitrary port can be chosen. It is assumed that that GTPDOOR is designed to support beaconing when the infected host is behind a stateful firewall with at least one TCP port open by using a connect scan, or a stateless firewall with an ACK scan.
+
+__NOTE__: The GTPDOOR message scan `--gtp` only attempts to invoke GTPDOOR's ACL query message type and not the remote code execution message in order to avoid arbitrary code execution. The contents of the GTP message response is discarded. That said, if you do not have permission to scan assets with GTPDOOR and do so, you could get into trouble. 
+
+Only run this tool against assets you are authorized to do so. Security researchers without prior permission may want to consider avoiding the `--gtp` flag. 
+
+### External network scanner support
+`gtpdoor-scan` can also be used alongside an external network scanner such as nmap or masscan by using the `--passive` switch. For example, nmap's [TCP ACK Scan](https://nmap.org/book/scan-methods-ack-scan.html) could be run while `gtpdoor-scan` is running on the same host in passive mode. While nmap may report the port as `unfiltered`, `gtpdoor-scan` will report that it received a possible beacon, indicating that GTPDOOR may have been running on the remote host.
+
+```
+$ gtpdoor-scan --passive &
+$ nmap -sA <target>
+```
+
+Note that with a TCP connect scan, the port MUST be open as GTPDOOR expects to receive an ACK message. 
 
 # Additional information
 GTPDOOR version 2 will respond with a TCP ACK/RST message with the URG flag not set but the urgent TCP field set to 0x01 on recieving a TCP ACK either from a TCP three way handshake (`--connect` parameter) or a single ACK (`--ACK` parameter) ingress ACK packet.

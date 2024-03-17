@@ -1,5 +1,6 @@
 /*
-GTPDOOR scanner
+GTPDOOR scanner - https://github.com/haxrob/gtpdoor-scan
+
 Author: https://x.com/haxrob
 Version: 0.1
 
@@ -403,13 +404,13 @@ func main() {
 	help := flag.BoolP("help", "h", false, "this message")
 	flag.Parse()
 	if *help {
-		fmt.Println("GTPDOOR network scanner [https://github.com/haxrob/gtpdoor-scanner]\n")
+		fmt.Println("GTPDOOR network scanner [@haxrob - https://github.com/haxrob/gtpdoor-scan]\n")
 		fmt.Printf("usage: %s [options] <targets>\n", os.Args[0])
 		fmt.Println("options:")
 		flag.PrintDefaults()
 		fmt.Printf("\n")
 		fmt.Println("<targets> is list of IP addresses or subnets\n")
-		fmt.Printf("example: %s --ack --ports 21,211 --gtp 192.168.0.0/24 10.2.1.1\n", os.Args[0])
+		fmt.Printf("example: %s --ack --ports 21,22 --gtp 192.168.0.0/24 10.2.1.1\n", os.Args[0])
 		fmt.Printf("example: %s --all -f targets.txt\n\n", os.Args[0])
 		os.Exit(0)
 	}
