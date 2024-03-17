@@ -303,7 +303,7 @@ func (s *Scanner) pcapListen() {
 			// This is somewhat of an invalid scenario? where the urgent flag is not set but the field is
 			// so if we see this, it could be a good chance it's a GTPDOOR response
 			if tcp.Urgent == 0x01 && !tcp.URG {
-				fmt.Printf("[\033[92m+\033[0m] Received possible beacon from host %s:%s\n", srcaddr, dstport)
+				fmt.Printf("[\033[92m+\033[0m] Received possible GTPDOOR TCP beacon from %s:%s\n", srcaddr, dstport)
 			}
 
 		}
@@ -317,7 +317,7 @@ func (s *Scanner) pcapListen() {
 
 				// GTP_ECHO_RESPONSE + GTPDOOR MSG TYPE 6
 				if m.GtpHeader[1] == 0x02 && m.MsgType == 0x06 {
-					fmt.Printf("[\033[92m+\033[0m] GTPDOOR message possibly received from %s:%d\n", srcaddr, udp.SrcPort)
+					fmt.Printf("[\033[92m+\033[0m] Received GTPDOOR GTP-C message reply from %s:%d\n", srcaddr, udp.SrcPort)
 				}
 			}
 		}
@@ -494,7 +494,7 @@ func main() {
 
 	// set when the context is closed after all hosts scanned
 	case <-scanner.context.Done():
-		fmt.Println("Exiting ...")
+		fmt.Println("\nFinished, exiting ...")
 		return
 	}
 }
