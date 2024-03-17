@@ -83,7 +83,7 @@ type host struct {
 }
 
 type gtpdoor struct {
-	GtpHeader [8]uint8 // we only care about GTP version byte
+	GtpHeader [8]uint8 // we only care about the 2nd byte (GTP message type)
 	Padding   [9]uint8
 	Key       uint32
 	MsgType   uint8
@@ -122,8 +122,7 @@ func newScanner(opts options) (*Scanner, error) {
 		return nil, err
 	}
 
-	// the pcap listener is blocking, later version supports a context, although
-	// this appears not to be pushed to google/gopacket repository, hence using gopacket/gopacket
+	// the pcap listener is blocking, later version supports a context
 	scanner.context, scanner.cancel = context.WithCancel(context.Background())
 
 	// snaplen could be trimmed
@@ -208,7 +207,7 @@ func (s *Scanner) sendGtpMsg(h host) {
 		GtpHeader: [8]uint8{0, 1, 0, 0, 0, 0, 0, 0},
 		Padding:   [9]uint8{1, 2, 3, 4, 5, 6, 7, 8, 9},
 		Key:       135798642,
-		MsgType:   0x06,
+		MsgType:   0x06, // the GTPDOOR ACL query message request
 	}
 	var m bytes.Buffer
 	binary.Write(&m, binary.LittleEndian, g)
@@ -454,7 +453,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	// not really needed
+	// not really needed, but perhaps if the scanner host is heavily loaded we might install
+	// a BPF filter
 	// tcp[13] == 0x14 = ACK + RST
 	/*if err := handle.SetBPFFilter("tcp[13] == 0x14"); err != nil {
 		panic(err)

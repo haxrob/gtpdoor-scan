@@ -13,7 +13,7 @@ Given these conditions, it cannot be guaranteed that GTPDOOR will be detected al
 ## Installation
 Compiled 64-bit Linux executable available [here](https://github.com/haxrob/gtpdoor-scan/releases/), or build yourself:
 ```
-go install github.com/haxrob/gtpdoor-scan/@latest
+go install github.com/haxrob/gtpdoor-scan@latest
 ```
 ## Running 
 ```
