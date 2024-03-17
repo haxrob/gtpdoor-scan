@@ -53,11 +53,12 @@ $ nmap -sA <target>
 
 Note that with a TCP connect scan, the port MUST be open as GTPDOOR expects to receive an ACK message from the remote (scanning) host. The TCP connect scan will be much slower then ACK or GTP scans. The number of workers/threads and timeout values can be adjusted accordingly. 
 
-The ["64bit / version 1 GTPDOOR malware"](https://www.virustotal.com/gui/file/827f41fc1a6f8a4c8a8575b3e2349aeaba0dfc2c9390ef1cceeef1bb85c34161) does not support TCP beaconing, so an external scanner will not be able to detect it. 
-
+The x86-64 / [version 1]( https://www.virustotal.com/gui/file/827f41fc1a6f8a4c8a8575b3e2349aeaba0dfc2c9390ef1cceeef1bb85c34161) sample does not support TCP beaconing, so an external scanner will not be able to detect it. 
 # Additional information
 GTPDOOR version 2 will respond with a TCP ACK/RST message with the URG flag not set but the urgent TCP field set to 0x01 on receiving a TCP ACK either from a TCP three way handshake (`--connect` parameter) or a single ACK (`--ACK` parameter) ingress ACK packet.
-A TCP ACK/RST will also be sent for a TCP SYN message but the urgent field will be set to zero. This condition is not considered a GTPDOOR beacon and is ignored.
+
+
+GTPDOOR will also fire off a TCP ACK/RST from an incoming TCP SYN packet, but the urgent field will be set to zero. This condition is not considered a unique GTPDOOR beacon, and hence is ignored.
 
 GTPDOOR version 1 does not support TCP probe/beacons. The detection method implemented here is to send a GTPDOOR GTP-C message with the message type of 0x06 which is a GTPDOOR ACL query message (`--gtp` parameter). The default auth/encryption key is used.
 
