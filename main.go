@@ -389,18 +389,18 @@ func inc(ip net.IP) {
 
 func main() {
 	opts := options{}
-	flag.BoolVar(&opts.passive, "passive", false, "Scan for GTPDOOR with another scanner but listen and to detection here.")
+	flag.BoolVar(&opts.passive, "passive", false, "Scan for GTPDOOR with another scanner but listen and do detection here.")
 	flag.BoolVarP(&opts.ackScan, "ack", "a", false, "ACK scan method - may work when inline firewall is stateless")
 	flag.BoolVarP(&opts.connectScan, "connect", "c", false, "Connect scan method (slow) - port specified must be open")
-	flag.BoolVarP(&opts.gtptry, "gtp", "g", false, "Attempt GTPDOOR msg type 6 (ACL query) over GTP-C 2123 using default key")
-	flag.StringVarP(&opts.iface, "iface", "i", "any", "interface to receive responses")
-	flag.StringVarP(&opts.ports, "ports", "p", "22", "TCP port numbers, separated by a comma")
+	flag.BoolVarP(&opts.gtptry, "gtp", "g", false, "Attempt GTPDOOR msg type 6 (ACL query) over GTP-C UDP port 2123 using default key")
+	flag.StringVarP(&opts.iface, "iface", "i", "any", "Interface to receive packets")
+	flag.StringVarP(&opts.ports, "ports", "p", "22", "TCP port numbers, separated by a comma.")
 	flag.StringVarP(&opts.targetfile, "file", "f", "", "Optional filename with list of targets (ip or subnets) per newline")
 	flag.IntVarP(&opts.timeout, "timeout", "t", 1, "TCP connect() mode timeout (seconds)")
 	flag.IntVarP(&opts.rateLimit, "rate", "r", 1000, "Rate limit (packets per second)")
-	flag.IntVarP(&opts.workers, "workers", "w", 10, "Parallel scan worker threads")
+	flag.IntVarP(&opts.workers, "workers", "w", 10, "Parallel scanning worker threads")
 	flag.BoolVar(&opts.useall, "all", false, "Use all scan methods (--gtp, --ack, --connect)")
-	help := flag.BoolP("help", "h", false, "this message")
+	help := flag.BoolP("help", "h", false, "This message")
 	flag.Parse()
 	if *help {
 		fmt.Println("GTPDOOR network scanner [@haxrob - https://github.com/haxrob/gtpdoor-scan]\n")
