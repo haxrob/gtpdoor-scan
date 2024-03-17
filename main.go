@@ -403,7 +403,7 @@ func main() {
 	help := flag.BoolP("help", "h", false, "this message")
 	flag.Parse()
 	if *help {
-		fmt.Println("GTPDOOR network scanner [https://x.com/haxrob]\n")
+		fmt.Println("GTPDOOR network scanner [https://github.com/haxrob/gtpdoor-scanner]\n")
 		fmt.Printf("usage: %s [options] <targets>\n", os.Args[0])
 		fmt.Println("options:")
 		flag.PrintDefaults()
